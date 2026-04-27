@@ -72,25 +72,32 @@ export default function COSSReadinessAssessment() {
   const { activitiesData, updateActivityData } = useActivities();
   const { coss } = activitiesData;
 
-  const handleToggle = (pillarId, qIndex) => {
+  const handleUpdate = (pillarId, qIndex, value) => {
     const updatedArray = [...(coss[pillarId] || [])];
-    updatedArray[qIndex] = !updatedArray[qIndex];
+    updatedArray[qIndex] = value;
     updateActivityData('coss', { [pillarId]: updatedArray });
   };
 
   const calculatePillarScore = (pillarId) => {
-    return (coss[pillarId] || []).filter(Boolean).length;
+    const responses = coss[pillarId] || [];
+    return responses.reduce((acc, curr) => {
+      if (curr === 'yes') return acc + 1;
+      if (curr === 'in-progress') return acc + 0.5;
+      return acc;
+    }, 0);
   };
 
-  const getStatusColor = (score) => {
-    if (score >= 4) return 'var(--success-color)';
-    if (score >= 2) return '#e3b341'; // yellow
+  const getStatusColor = (score, max) => {
+    const ratio = score / max;
+    if (ratio >= 0.8) return 'var(--success-color)';
+    if (ratio >= 0.4) return '#e3b341'; // yellow
     return '#ff4d4f'; // red
   };
 
-  const getStatusText = (score) => {
-    if (score >= 4) return 'Strong performance level';
-    if (score >= 2) return 'Moderate development needed';
+  const getStatusText = (score, max) => {
+    const ratio = score / max;
+    if (ratio >= 0.8) return 'Strong performance level';
+    if (ratio >= 0.4) return 'Moderate development needed';
     return 'Immediate attention required';
   };
 
@@ -103,17 +110,18 @@ export default function COSSReadinessAssessment() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
         {PILLARS.map((pillar) => {
+          const maxScore = pillar.questions.length;
           const score = calculatePillarScore(pillar.id);
-          const color = getStatusColor(score);
-          const text = getStatusText(score);
+          const color = getStatusColor(score, maxScore);
+          const text = getStatusText(score, maxScore);
 
           return (
-            <div key={pillar.id} style={{ backgroundColor: 'var(--card-bg)', borderRadius: '8px', overflow: 'hidden' }}>
+            <div key={pillar.id} style={{ backgroundColor: 'var(--card-bg)', borderRadius: '8px', overflow: 'hidden', borderLeft: `4px solid ${color}` }}>
               <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h3 style={{ color: '#fff', fontSize: '1.2rem' }}>{pillar.title}</h3>
+                <h3 style={{ color: '#fff', fontSize: '1.2rem', margin: 0 }}>{pillar.title}</h3>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                   <div style={{ padding: '0.25rem 0.75rem', borderRadius: '20px', backgroundColor: 'rgba(255,255,255,0.1)', color: '#fff', fontSize: '0.9rem', fontWeight: 'bold' }}>
-                    Score: {score}/{pillar.questions.length}
+                    Score: {score}/{maxScore}
                   </div>
                   <div style={{ padding: '0.25rem 0.75rem', borderRadius: '20px', backgroundColor: `${color}22`, color: color, fontSize: '0.85rem', fontWeight: '600' }}>
                     {text}
@@ -122,17 +130,33 @@ export default function COSSReadinessAssessment() {
               </div>
               <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {pillar.questions.map((question, index) => {
-                  const isChecked = (coss[pillar.id] || [])[index] || false;
+                  const currentValue = (coss[pillar.id] || [])[index] || null;
+                  
                   return (
-                    <label key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer', padding: '0.75rem', backgroundColor: isChecked ? 'rgba(50, 78, 216, 0.1)' : 'transparent', borderRadius: '6px', border: `1px solid ${isChecked ? 'var(--primary-color)' : 'transparent'}`, transition: 'all 0.2s' }}>
-                      <input 
-                        type="checkbox" 
-                        checked={isChecked} 
-                        onChange={() => handleToggle(pillar.id, index)} 
-                        style={{ width: '20px', height: '20px', marginTop: '2px', accentColor: 'var(--primary-color)' }} 
-                      />
-                      <span style={{ color: isChecked ? '#fff' : 'var(--text-muted)' }}>{question}</span>
-                    </label>
+                    <div key={index} style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', gap: '1rem', alignItems: 'center', padding: '1rem', backgroundColor: currentValue ? 'rgba(255,255,255,0.02)' : 'transparent', borderRadius: '6px', borderBottom: index < pillar.questions.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
+                      <span style={{ color: '#fff', lineHeight: '1.4' }}>{question}</span>
+                      
+                      <div style={{ display: 'flex', gap: '0.5rem', backgroundColor: 'rgba(0,0,0,0.2)', padding: '0.25rem', borderRadius: '6px' }}>
+                        <button 
+                          onClick={() => handleUpdate(pillar.id, index, 'yes')}
+                          style={{ padding: '0.4rem 1rem', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '600', backgroundColor: currentValue === 'yes' ? 'var(--success-color)' : 'transparent', color: currentValue === 'yes' ? '#000' : 'var(--text-muted)', transition: 'all 0.2s' }}
+                        >
+                          Yes
+                        </button>
+                        <button 
+                          onClick={() => handleUpdate(pillar.id, index, 'in-progress')}
+                          style={{ padding: '0.4rem 1rem', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '600', backgroundColor: currentValue === 'in-progress' ? '#e3b341' : 'transparent', color: currentValue === 'in-progress' ? '#000' : 'var(--text-muted)', transition: 'all 0.2s' }}
+                        >
+                          In Progress
+                        </button>
+                        <button 
+                          onClick={() => handleUpdate(pillar.id, index, 'no')}
+                          style={{ padding: '0.4rem 1rem', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '600', backgroundColor: currentValue === 'no' ? '#ff4d4f' : 'transparent', color: currentValue === 'no' ? '#000' : 'var(--text-muted)', transition: 'all 0.2s' }}
+                        >
+                          No
+                        </button>
+                      </div>
+                    </div>
                   );
                 })}
               </div>
