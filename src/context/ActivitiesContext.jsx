@@ -11,7 +11,7 @@ export function ActivitiesProvider({ children }) {
       listing: { productType: 'SaaS', shortDesc: '', longDesc: '', highlights: '', keywords: '', pricingModel: 'Pay-As-You-Go', pricingDimensions: '', taxDetails: '', bankingDetails: '', companyAddress: '' },
       ftr: { isWellArchitected: false, hasCISReport: false, encryptionAtRest: false, tenantIsolation: false, notes: '' },
       partnerTier: { currentTier: 'Enrolled', certs: { cloudPractitioner: false, solutionsArchitectAssoc: false, solutionsArchitectPro: false, securitySpec: false }, coSellJourney: 'Good', enablementStage: 'Early' },
-      opportunityHygiene: { customerConsent: false, architectureDefined: false, clearAWSValue: '', dealSize: '', useCase: '' },
+      opportunityHygiene: { customerConsent: false, isNatSec: 'No', customerWebsite: '', industry: '', companyName: '', postalCode: '', country: 'United States', expectedAWSRevenue: '', targetCloseDate: '', solutionOffered: '', deliveryModel: 'SaaS', useCase: '', customerProblem: '', partnerPrimaryNeed: '' },
       templates: { prTitle: '', prBody: '', faq1: '', faq2: '', jvp: '', emailSubject: '', emailContext: '', emailAWSValue: '', emailAsk: '' },
       qbr: { partnerName: '', qbrDate: '', wins: '', revenueImpact: '', escalations: '', nextSteps: '' },
       coss: {

@@ -45,7 +45,7 @@ export default function DocumentTemplates() {
       </div>
 
       <div style={{ paddingTop: '2rem', borderTop: '1px solid var(--border-color)', marginTop: '2rem' }}>
-        <h3 style={{ color: 'var(--primary-color)', marginBottom: '1rem' }}>3. AWS Engagement Messaging (AllStacks Template)</h3>
+        <h3 style={{ color: 'var(--primary-color)', marginBottom: '1rem' }}>3. AWS Engagement Messaging</h3>
         <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>Initial Opportunity Introduction email structure for contacting AWS Account Managers.</p>
 
         <div className="input-block" style={{ marginBottom: '1rem' }}>
