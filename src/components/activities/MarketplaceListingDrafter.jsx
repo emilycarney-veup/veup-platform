@@ -12,62 +12,53 @@ export default function MarketplaceListingDrafter() {
     <div>
       <h2 style={{ marginBottom: '0.5rem', color: '#fff' }}>Marketplace Listing Drafter</h2>
       <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>
-        Prepare the technical metadata for your public AWS Marketplace listing. (From Module 1 & 2)
+        Fill out the core requirements for your listing page metadata.
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        <div className="input-block">
-          <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Public Value Proposition (Max 250 words)</label>
-          <textarea
-            name="valueProp"
-            value={listing.valueProp}
-            onChange={handleChange}
-            className="activity-textarea"
-            placeholder="Enter the primary value proposition that will appear at the top of your AWS Marketplace listing..."
-            rows={4}
-          />
-        </div>
-
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
           <div className="input-block">
-            <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Deployment Architecture</label>
-            <select
-              name="architecture"
-              value={listing.architecture}
-              onChange={handleChange}
-              className="activity-select"
-            >
+            <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Product Type</label>
+            <select name="productType" value={listing.productType} onChange={handleChange} className="activity-select">
               <option value="SaaS">SaaS (Fully Managed)</option>
-              <option value="AMI">AMI (Amazon Machine Image)</option>
+              <option value="ProServe">Professional Services</option>
+              <option value="AMI">AMI</option>
               <option value="Container">Container</option>
             </select>
           </div>
-
           <div className="input-block">
-            <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Primary Pricing Model</label>
-            <select
-              name="pricingModel"
-              value={listing.pricingModel}
-              onChange={handleChange}
-              className="activity-select"
-            >
+            <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Pricing Model</label>
+            <select name="pricingModel" value={listing.pricingModel} onChange={handleChange} className="activity-select">
               <option value="Pay-As-You-Go">Consumption (Pay-As-You-Go)</option>
-              <option value="Annual-Contract">Annual Contract (Upfront)</option>
-              <option value="Free-Trial">Free Trial -> Monthly</option>
+              <option value="Annual">Annual / Multi-Year Contract</option>
+              <option value="Free-Trial">Free Trial</option>
             </select>
           </div>
         </div>
 
         <div className="input-block">
-          <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Target Buyer Persona</label>
-          <input
-            type="text"
-            name="targetAudience"
-            value={listing.targetAudience}
-            onChange={handleChange}
-            className="activity-input"
-            placeholder="e.g. CTOs / Head of Infosec at FinTech companies"
-          />
+          <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Short Description</label>
+          <input type="text" name="shortDesc" value={listing.shortDesc} onChange={handleChange} className="activity-input" placeholder="A brief punchy tagline..." />
+        </div>
+
+        <div className="input-block">
+          <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Long Description</label>
+          <textarea name="longDesc" value={listing.longDesc} onChange={handleChange} className="activity-textarea" placeholder="Detailed product overview..." rows={4} />
+        </div>
+
+        <div className="input-block">
+          <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Product Highlights (Bullet Points)</label>
+          <textarea name="highlights" value={listing.highlights} onChange={handleChange} className="activity-textarea" placeholder="- Feature 1&#10;- Feature 2" rows={3} />
+        </div>
+
+        <div className="input-block">
+          <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Search Keywords (Comma separated)</label>
+          <input type="text" name="keywords" value={listing.keywords} onChange={handleChange} className="activity-input" placeholder="e.g. Security, DevOps, Automation" />
+        </div>
+
+        <div className="input-block">
+          <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Pricing Dimensions (If applicable)</label>
+          <input type="text" name="pricingDimensions" value={listing.pricingDimensions} onChange={handleChange} className="activity-input" placeholder="e.g. $0.15 per Gigabyte Processed" />
         </div>
       </div>
     </div>
