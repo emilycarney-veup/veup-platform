@@ -124,7 +124,7 @@ export default function COSSReadinessAssessment() {
                 {pillar.questions.map((question, index) => {
                   const isChecked = (coss[pillar.id] || [])[index] || false;
                   return (
-                    <label key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer', padding: '0.75rem', backgroundColor: isChecked ? 'rgba(50, 78, 216, 0.1)' : 'transparent', borderRadius: '6px', border: \`1px solid \${isChecked ? 'var(--primary-color)' : 'transparent'}\`, transition: 'all 0.2s' }}>
+                    <label key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer', padding: '0.75rem', backgroundColor: isChecked ? 'rgba(50, 78, 216, 0.1)' : 'transparent', borderRadius: '6px', border: `1px solid ${isChecked ? 'var(--primary-color)' : 'transparent'}`, transition: 'all 0.2s' }}>
                       <input 
                         type="checkbox" 
                         checked={isChecked} 
