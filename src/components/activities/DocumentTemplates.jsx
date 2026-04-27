@@ -43,6 +43,28 @@ export default function DocumentTemplates() {
           <textarea name="jvp" value={templates.jvp} onChange={handleText} className="activity-textarea" placeholder="Our product fixes [Problem] by utilizing scalable [AWS Service] AND [AWS Service], burning down the client's current AWS spend commit..." rows={5} />
         </div>
       </div>
+
+      <div style={{ paddingTop: '2rem', borderTop: '1px solid var(--border-color)', marginTop: '2rem' }}>
+        <h3 style={{ color: 'var(--primary-color)', marginBottom: '1rem' }}>3. AWS Engagement Messaging (AllStacks Template)</h3>
+        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>Initial Opportunity Introduction email structure for contacting AWS Account Managers.</p>
+
+        <div className="input-block" style={{ marginBottom: '1rem' }}>
+          <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Subject Line</label>
+          <input type="text" name="emailSubject" value={templates.emailSubject || ''} onChange={handleText} className="activity-input" placeholder="e.g. AWS + [Company] Co-Sell Opp: [Customer Name] | [AWS Service]" />
+        </div>
+        <div className="input-block" style={{ marginBottom: '1rem' }}>
+          <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Customer Context & Business Challenge</label>
+          <textarea name="emailContext" value={templates.emailContext || ''} onChange={handleText} className="activity-textarea" placeholder="Provide background on the customer, their current AWS usage, and the pain point..." rows={3} />
+        </div>
+        <div className="input-block" style={{ marginBottom: '1rem' }}>
+          <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Expected AWS Consumption Increase</label>
+          <textarea name="emailAWSValue" value={templates.emailAWSValue || ''} onChange={handleText} className="activity-textarea" placeholder="Exactly what AWS services will be deployed/consumed? Estimate the ARR impact for the AM..." rows={2} />
+        </div>
+        <div className="input-block">
+          <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Specific Support Requested (The "Ask")</label>
+          <textarea name="emailAsk" value={templates.emailAsk || ''} onChange={handleText} className="activity-textarea" placeholder="Make a specific, actionable ask! Provide a timeline and offer reciprocity..." rows={2} />
+        </div>
+      </div>
     </div>
   );
 }

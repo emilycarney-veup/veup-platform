@@ -8,6 +8,10 @@ export default function PartnerTierTracker() {
     updateActivityData('partnerTier', { currentTier: e.target.value });
   };
 
+  const handleSelectField = (e) => {
+    updateActivityData('partnerTier', { [e.target.name]: e.target.value });
+  };
+
   const handleCert = (e) => {
     updateActivityData('partnerTier', { certs: { ...partnerTier.certs, [e.target.name]: e.target.checked } });
   };
@@ -55,6 +59,32 @@ export default function PartnerTierTracker() {
               <span>{cert.label}</span>
             </label>
           ))}
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+        <div style={{ backgroundColor: 'var(--card-bg)', padding: '1.5rem', borderRadius: '8px' }}>
+          <h3 style={{ color: '#fff', marginBottom: '1rem', fontSize: '1.1rem' }}>Your Co-Sell Journey</h3>
+          <select name="coSellJourney" value={partnerTier.coSellJourney || 'Good'} onChange={handleSelectField} className="activity-select" style={{ marginBottom: '1rem' }}>
+            <option value="Good">Good (Foundation Level: ACE Terms, Software Path)</option>
+            <option value="Better">Better (Validation Level: 10+ opps, FTR, Listing)</option>
+            <option value="Best">Best (ISV Accelerate: Private Offers, 5+ Case Studies)</option>
+          </select>
+          <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '6px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+            Goal: Systematically progress from Foundation to ISV Accelerate to maximize AWS AM mindshare and demand creation.
+          </div>
+        </div>
+
+        <div style={{ backgroundColor: 'var(--card-bg)', padding: '1.5rem', borderRadius: '8px' }}>
+          <h3 style={{ color: '#fff', marginBottom: '1rem', fontSize: '1.1rem' }}>Sales Enablement Stage</h3>
+          <select name="enablementStage" value={partnerTier.enablementStage || 'Early'} onChange={handleSelectField} className="activity-select" style={{ marginBottom: '1rem' }}>
+            <option value="Early">Early Stage (Foundational collateral, 1-to-few webinars, short videos)</option>
+            <option value="Growth">Growth Stage (Bootcamps, hackathons, whitepapers, thought leadership)</option>
+            <option value="Mature">Mature Stage (1-to-many webinars, strategic announcements, tech champions)</option>
+          </select>
+          <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '6px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+            Align your marketing efforts to the correct enablement stage to prevent targeting the wrong audience with the wrong message.
+          </div>
         </div>
       </div>
     </div>

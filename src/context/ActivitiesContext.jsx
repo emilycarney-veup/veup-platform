@@ -8,13 +8,20 @@ export function ActivitiesProvider({ children }) {
     return saved ? JSON.parse(saved) : {
       stakeholders: { sponsorName: '', sponsorTitle: '', sponsorEmail: '', leadName: '', leadTitle: '', leadEmail: '', techName: '', techTitle: '', techEmail: '' },
       betterTogether: { problem: '', agility: '', security: '', procurement: '', story: '' },
-      listing: { productType: 'SaaS', shortDesc: '', longDesc: '', highlights: '', keywords: '', pricingModel: 'Pay-As-You-Go', pricingDimensions: '' },
+      listing: { productType: 'SaaS', shortDesc: '', longDesc: '', highlights: '', keywords: '', pricingModel: 'Pay-As-You-Go', pricingDimensions: '', taxDetails: '', bankingDetails: '', companyAddress: '' },
       ftr: { isWellArchitected: false, hasCISReport: false, encryptionAtRest: false, tenantIsolation: false, notes: '' },
-      partnerTier: { currentTier: 'Enrolled', certs: { cloudPractitioner: false, solutionsArchitectAssoc: false, solutionsArchitectPro: false, securitySpec: false } },
+      partnerTier: { currentTier: 'Enrolled', certs: { cloudPractitioner: false, solutionsArchitectAssoc: false, solutionsArchitectPro: false, securitySpec: false }, coSellJourney: 'Good', enablementStage: 'Early' },
       opportunityHygiene: { customerConsent: false, architectureDefined: false, clearAWSValue: '', dealSize: '', useCase: '' },
-      templates: { prTitle: '', prBody: '', faq1: '', faq2: '', jvp: '' },
+      templates: { prTitle: '', prBody: '', faq1: '', faq2: '', jvp: '', emailSubject: '', emailContext: '', emailAWSValue: '', emailAsk: '' },
       qbr: { partnerName: '', qbrDate: '', wins: '', revenueImpact: '', escalations: '', nextSteps: '' },
-      coss: { q1: '1', q2: '1', q3: '1', q4: '1', q5: '1' },
+      coss: {
+        partnerPrograms: [false, false, false, false, false],
+        selection: [false, false, false, false],
+        operational: [false, false, false, false, false],
+        revenue: [false, false, false, false, false],
+        salesAlignment: [false, false, false, false, false],
+        enablement: [false, false, false, false, false]
+      },
       expansion: { market: '1', leadership: '1', ops: '1', finance: '1', sales: '1', product: '1' },
       salesPlays: { plays: [{id: 1, text: 'Data Migration to S3', rank: 1}, {id: 2, text: 'GenAI Pilot with Bedrock', rank: 2}, {id: 3, text: 'Legacy Monolith to EKS', rank: 3}] },
       funding: { transactedOver65k: false, ftrPassed: false, hasCompetency: false }

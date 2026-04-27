@@ -60,6 +60,27 @@ export default function MarketplaceListingDrafter() {
           <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Pricing Dimensions (If applicable)</label>
           <input type="text" name="pricingDimensions" value={listing.pricingDimensions} onChange={handleChange} className="activity-input" placeholder="e.g. $0.15 per Gigabyte Processed" />
         </div>
+
+        <hr style={{ border: 'none', borderTop: '1px solid var(--border-color)', margin: '1rem 0' }} />
+        <h3 style={{ color: '#fff', fontSize: '1.2rem', marginBottom: '0.5rem' }}>Registration Financials</h3>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>These are critical internal prerequisites for the seller profile approval.</p>
+
+        <div className="input-block">
+          <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Company Address</label>
+          <input type="text" name="companyAddress" value={listing.companyAddress || ''} onChange={handleChange} className="activity-input" placeholder="Official business address matching your tax profile..." />
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+          <div className="input-block">
+            <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Tax + VAT Details</label>
+            <input type="text" name="taxDetails" value={listing.taxDetails || ''} onChange={handleChange} className="activity-input" placeholder="VAT Number / Tax ID" />
+            <p style={{marginTop: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)'}}>*Your tax interview location must match the business location.</p>
+          </div>
+          <div className="input-block">
+            <label className="activity-label" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Banking Details</label>
+            <input type="text" name="bankingDetails" value={listing.bankingDetails || ''} onChange={handleChange} className="activity-input" placeholder="US ACH / SWIFT (Requires Hyperwallet if non-US)" />
+          </div>
+        </div>
       </div>
     </div>
   );
