@@ -4,13 +4,16 @@ import App from './App.jsx'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import { ProgressProvider } from './context/ProgressContext.jsx'
+import { ActivitiesProvider } from './context/ActivitiesContext.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ProgressProvider>
-        <App />
-      </ProgressProvider>
+      <ActivitiesProvider>
+        <ProgressProvider>
+          <App />
+        </ProgressProvider>
+      </ActivitiesProvider>
     </BrowserRouter>
   </React.StrictMode>,
 )

@@ -3,6 +3,7 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import ModuleView from './pages/ModuleView';
 import Resources from './pages/Resources';
+import Activities from './pages/Activities';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/module/:moduleId" element={<ModuleView />} />
           <Route path="/resources" element={<Resources />} />
+          <Route path="/activities" element={<Activities />} />
         </Routes>
       </main>
     </div>
