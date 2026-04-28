@@ -22,7 +22,7 @@ export function ActivitiesProvider({ children }) {
         salesAlignment: [null, null, null, null, null],
         enablement: [null, null, null, null, null]
       },
-      expansion: { market: '1', leadership: '1', ops: '1', finance: '1', sales: '1', product: '1' },
+      expansion: { market: '0', leadership: '0', ops: '0', finance: '0', tech: '0', product: '0', sales: '0', risk: '0' },
       salesPlays: { plays: [{id: 1, text: 'Data Migration to S3', rank: 1}, {id: 2, text: 'GenAI Pilot with Bedrock', rank: 2}, {id: 3, text: 'Legacy Monolith to EKS', rank: 3}] },
       funding: { transactedOver65k: false, ftrPassed: false, hasCompetency: false }
     };
