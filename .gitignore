@@ -1,1 +1,6 @@
 .vercel
+assessment_dump*
+node_modules/
+dist/
+.env
+.DS_Store

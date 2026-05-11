@@ -4,8 +4,7 @@ const ActivitiesContext = createContext();
 
 export function ActivitiesProvider({ children }) {
   const [activitiesData, setActivitiesData] = useState(() => {
-    const saved = localStorage.getItem('veup-activities-v2');
-    return saved ? JSON.parse(saved) : {
+    const defaultData = {
       stakeholders: { sponsorName: '', sponsorTitle: '', sponsorEmail: '', leadName: '', leadTitle: '', leadEmail: '', techName: '', techTitle: '', techEmail: '' },
       betterTogether: { problem: '', agility: '', security: '', procurement: '', story: '' },
       listing: { productType: 'SaaS', shortDesc: '', longDesc: '', highlights: '', keywords: '', pricingModel: 'Pay-As-You-Go', pricingDimensions: '', taxDetails: '', bankingDetails: '', companyAddress: '' },
@@ -22,9 +21,17 @@ export function ActivitiesProvider({ children }) {
         salesAlignment: [null, null, null, null, null],
         enablement: [null, null, null, null, null]
       },
-      expansion: { market: '0', leadership: '0', ops: '0', finance: '0', tech: '0', product: '0', sales: '0', risk: '0' },
+      expansion: { objectives: [], regions: [], challenges: [], market: '0', leadership: '0', ops: '0', finance: '0', tech: '0', product: '0', sales: '0', risk: '0' },
       salesPlays: { plays: [{id: 1, text: 'Data Migration to S3', rank: 1}, {id: 2, text: 'GenAI Pilot with Bedrock', rank: 2}, {id: 3, text: 'Legacy Monolith to EKS', rank: 3}] },
       funding: { transactedOver65k: false, ftrPassed: false, hasCompetency: false }
+    };
+    const saved = localStorage.getItem('veup-activities-v2');
+    if (!saved) return defaultData;
+    const parsed = JSON.parse(saved);
+    return { 
+      ...defaultData, 
+      ...parsed, 
+      expansion: { ...defaultData.expansion, ...(parsed.expansion || {}) } // deep merge expansion to fix crash
     };
   });
 
