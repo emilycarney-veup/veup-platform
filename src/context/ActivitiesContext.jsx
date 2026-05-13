@@ -32,6 +32,13 @@ export function ActivitiesProvider({ children }) {
           technical: { 1: null, 2: null, 3: null },
           gtm: { 1: null, 2: null, 3: null }
         }
+      },
+      plgActionPlan: {
+        actions: [
+          { id: 1, category: 'Marketplace', action: 'Complete AWS Marketplace listing submission', owner: '', targetDate: '', status: 'Not Started' },
+          { id: 2, category: 'Product', action: 'Implement self-service onboarding flow', owner: '', targetDate: '', status: 'Not Started' },
+          { id: 3, category: 'Pricing', action: 'Define Pay-As-You-Go pricing dimensions', owner: '', targetDate: '', status: 'Not Started' }
+        ]
       }
     };
     const saved = localStorage.getItem('veup-activities-v2');

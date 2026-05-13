@@ -18,6 +18,7 @@ import ExpansionReadiness from '../components/activities/ExpansionReadiness';
 import SalesPlaysRanker from '../components/activities/SalesPlaysRanker';
 import FundingEligibilityChecker from '../components/activities/FundingEligibilityChecker';
 import PLGReadinessAssessment from '../components/activities/PLGReadinessAssessment';
+import PLGActionPlan from '../components/activities/PLGActionPlan';
 
 export default function Activities() {
   const [activeActivity, setActiveActivity] = useState(null);
@@ -36,6 +37,7 @@ export default function Activities() {
     { id: 'sales', name: 'Sales Plays Ranker', icon: <ListOrdered size={24} />, color: '#ff7b72', component: <SalesPlaysRanker /> },
     { id: 'funding', name: 'Funding Eligibility', icon: <DollarSign size={24} />, color: '#dfff00', component: <FundingEligibilityChecker /> },
     { id: 'plg-readiness', name: 'PLG Readiness Assessment', icon: <Target size={24} />, color: '#58a6ff', component: <PLGReadinessAssessment /> },
+    { id: 'plg-action-plan', name: 'PLG Action Plan', icon: <Target size={24} />, color: '#58a6ff', component: <PLGActionPlan /> },
   ];
 
   const { activitiesData } = useActivities();
@@ -49,6 +51,7 @@ export default function Activities() {
     if (activityId === 'opportunity') contextKey = 'opportunityHygiene';
     if (activityId === 'sales') contextKey = 'salesPlays';
     if (activityId === 'plg-readiness') contextKey = 'plgReadiness';
+    if (activityId === 'plg-action-plan') contextKey = 'plgActionPlan';
 
     const dataToExport = {
       veupActivityExport: true,
