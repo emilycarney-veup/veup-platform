@@ -23,7 +23,16 @@ export function ActivitiesProvider({ children }) {
       },
       expansion: { objectives: [], regions: [], challenges: [], market: '0', leadership: '0', ops: '0', finance: '0', tech: '0', product: '0', sales: '0', risk: '0' },
       salesPlays: { plays: [{id: 1, text: 'Data Migration to S3', rank: 1}, {id: 2, text: 'GenAI Pilot with Bedrock', rank: 2}, {id: 3, text: 'Legacy Monolith to EKS', rank: 3}] },
-      funding: { transactedOver65k: false, ftrPassed: false, hasCompetency: false }
+      funding: { transactedOver65k: false, ftrPassed: false, hasCompetency: false },
+      plgReadiness: {
+        categories: {
+          marketplace: { 1: null, 2: null, 3: null },
+          product: { 1: null, 2: null, 3: null },
+          pricing: { 1: null, 2: null, 3: null },
+          technical: { 1: null, 2: null, 3: null },
+          gtm: { 1: null, 2: null, 3: null }
+        }
+      }
     };
     const saved = localStorage.getItem('veup-activities-v2');
     if (!saved) return defaultData;
