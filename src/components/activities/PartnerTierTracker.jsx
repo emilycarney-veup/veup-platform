@@ -2,140 +2,206 @@ import { useActivities } from '../../context/ActivitiesContext';
 
 export default function PartnerTierTracker() {
   const { activitiesData, updateActivityData } = useActivities();
-  const { partnerTier } = activitiesData;
+  
+  // Ensure we have defaults for new fields without breaking old ones
+  const partnerTier = {
+    currentTier: 'Enrolled',
+    ...activitiesData.partnerTier,
+    certs: {
+      cloudPractitioner: 0,
+      associate: 0,
+      professional: 0,
+      specialty: 0,
+      ...(activitiesData.partnerTier?.certs || {})
+    },
+    accreditations: {
+      business: 0,
+      technical: 0,
+      ...(activitiesData.partnerTier?.accreditations || {})
+    }
+  };
 
-  const handleTierChange = (e) => updateActivityData('partnerTier', { currentTier: e.target.value });
+  const handleTierChange = (e) => updateActivityData('partnerTier', { ...partnerTier, currentTier: e.target.value });
+  
   const handleCertChange = (certName, value) => {
     updateActivityData('partnerTier', {
-      certs: { ...partnerTier.certs, [certName]: parseInt(value) || 0 }
+      ...partnerTier,
+      certs: { ...partnerTier.certs, [certName]: Math.max(0, parseInt(value) || 0) }
     });
   };
-  const handleJourneyChange = (e) => updateActivityData('partnerTier', { coSellJourney: e.target.value });
-  const handleEnablementChange = (e) => updateActivityData('partnerTier', { enablementStage: e.target.value });
+  
+  const handleAccredChange = (accName, value) => {
+    updateActivityData('partnerTier', {
+      ...partnerTier,
+      accreditations: { ...partnerTier.accreditations, [accName]: Math.max(0, parseInt(value) || 0) }
+    });
+  };
 
-  const requiredCerts = {
-    SoftwareDifferentiated: { cp: 4, sa: 4, pro: 1 },
-    ServicesSelect: { cp: 2, sa: 2 },
-    ServicesAdvanced: { cp: 4, sa: 4, pro: 3 },
-    ServicesPremier: { cp: 10, sa: 10, pro: 10 }
+  // Logic to determine readiness
+  const totals = {
+    busAcc: partnerTier.accreditations.business,
+    techAcc: partnerTier.accreditations.technical,
+    totalAcc: partnerTier.accreditations.business + partnerTier.accreditations.technical,
+    cp: partnerTier.certs.cloudPractitioner,
+    technicalCerts: partnerTier.certs.associate + partnerTier.certs.professional + partnerTier.certs.specialty,
+    proSpec: partnerTier.certs.professional + partnerTier.certs.specialty,
+    totalCerts: partnerTier.certs.cloudPractitioner + partnerTier.certs.associate + partnerTier.certs.professional + partnerTier.certs.specialty
   };
 
   const isEligible = (tier) => {
-    if (tier === 'SoftwareValidated') return true; // Handled by ACE/FTR, no certs
-    if (tier === 'SoftwareDifferentiated') return partnerTier.certs.cloudPractitioner >= requiredCerts.SoftwareDifferentiated.cp && partnerTier.certs.solutionsArchitectPro >= requiredCerts.SoftwareDifferentiated.pro;
-    if (tier === 'ServicesSelect') return partnerTier.certs.cloudPractitioner >= requiredCerts.ServicesSelect.cp && partnerTier.certs.solutionsArchitectAssoc >= requiredCerts.ServicesSelect.sa;
-    if (tier === 'ServicesAdvanced') return partnerTier.certs.cloudPractitioner >= requiredCerts.ServicesAdvanced.cp && partnerTier.certs.solutionsArchitectPro >= requiredCerts.ServicesAdvanced.pro;
-    if (tier === 'ServicesPremier') return partnerTier.certs.cloudPractitioner >= requiredCerts.ServicesPremier.cp && partnerTier.certs.solutionsArchitectPro >= requiredCerts.ServicesPremier.pro;
+    if (tier === 'ServicesSelect') {
+      return totals.busAcc >= 2 && totals.techAcc >= 2 && totals.cp >= 2 && totals.technicalCerts >= 2;
+    }
+    if (tier === 'ServicesAdvanced') {
+      return totals.busAcc >= 4 && totals.techAcc >= 4 && totals.cp >= 4 && totals.technicalCerts >= 6 && totals.proSpec >= 3;
+    }
+    if (tier === 'ServicesPremier') {
+      return totals.busAcc >= 10 && totals.techAcc >= 10 && totals.cp >= 10 && totals.technicalCerts >= 25 && totals.proSpec >= 10;
+    }
     return true;
   };
 
   return (
     <div>
-      <h2 style={{ marginBottom: '0.5rem', color: '#fff' }}>Partner Tier & Enablement Tracker</h2>
+      <h2 style={{ marginBottom: '0.5rem', color: '#fff' }}>AWS Partner Tier & Certification Tracker</h2>
       <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>
-        Track your organization's progression through APN levels and key enablement stages.
+        Track your organization's personnel progression through AWS Accreditations and Certifications required for the Services Path.
       </p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
-        <div style={{ backgroundColor: 'var(--card-bg)', padding: '1.5rem', borderRadius: '8px' }}>
-          <h3 style={{ color: '#fff', marginBottom: '1rem', fontSize: '1.1rem' }}>Current Partner Tier</h3>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
+        {/* Current Tier */}
+        <div style={{ backgroundColor: 'var(--card-bg)', padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+          <h3 style={{ color: '#fff', marginBottom: '1rem', fontSize: '1.1rem' }}>Current Services Tier</h3>
           <select 
             value={partnerTier.currentTier} 
             onChange={handleTierChange}
             style={{ width: '100%', padding: '0.75rem', backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff', border: '1px solid var(--border-color)', borderRadius: '6px', fontSize: '1rem' }}
           >
             <option value="Enrolled">Enrolled</option>
-            <option value="SoftwareValidated">Software: Validated</option>
-            <option value="SoftwareDifferentiated">Software: Differentiated</option>
-            <option value="ServicesSelect">Services: Select</option>
-            <option value="ServicesAdvanced">Services: Advanced</option>
-            <option value="ServicesPremier">Services: Premier</option>
+            <option value="ServicesSelect">Select Tier</option>
+            <option value="ServicesAdvanced">Advanced Tier</option>
+            <option value="ServicesPremier">Premier Tier</option>
           </select>
+          <div style={{ marginTop: '1rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+            <p><strong>Universal Requirement:</strong> All Service Partner tiers require the $2,500 annual APN Program fee (yields $3,500 in AWS Credits).</p>
+          </div>
         </div>
 
-        <div style={{ backgroundColor: 'var(--card-bg)', padding: '1.5rem', borderRadius: '8px' }}>
-          <h3 style={{ color: '#fff', marginBottom: '1rem', fontSize: '1.1rem' }}>Certifications Held (Company-Wide)</h3>
-          
+        {/* Accreditations Tracker */}
+        <div style={{ backgroundColor: 'var(--card-bg)', padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+          <h3 style={{ color: '#fff', marginBottom: '1rem', fontSize: '1.1rem' }}>Accreditations (Partner Central)</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-muted)' }}>
-              <span>AWS Cloud Practitioner</span>
-              <select value={partnerTier.certs.cloudPractitioner} onChange={(e) => handleCertChange('cloudPractitioner', e.target.value)} style={{ padding: '0.25rem 0.5rem', borderRadius: '4px', backgroundColor: '#222', color: '#fff', border: '1px solid #444' }}>
-                {[0,1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}{n === 10 ? '+' : ''}</option>)}
-              </select>
+              <span>Business Accreditations</span>
+              <input type="number" min="0" value={partnerTier.accreditations.business} onChange={(e) => handleAccredChange('business', e.target.value)} style={{ width: '60px', padding: '0.4rem', borderRadius: '4px', backgroundColor: '#222', color: '#fff', border: '1px solid #444', textAlign: 'center' }} />
             </label>
             <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-muted)' }}>
-              <span>AWS Solutions Architect (Associate)</span>
-              <select value={partnerTier.certs.solutionsArchitectAssoc} onChange={(e) => handleCertChange('solutionsArchitectAssoc', e.target.value)} style={{ padding: '0.25rem 0.5rem', borderRadius: '4px', backgroundColor: '#222', color: '#fff', border: '1px solid #444' }}>
-                {[0,1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}{n === 10 ? '+' : ''}</option>)}
-              </select>
+              <span>Technical Accreditations</span>
+              <input type="number" min="0" value={partnerTier.accreditations.technical} onChange={(e) => handleAccredChange('technical', e.target.value)} style={{ width: '60px', padding: '0.4rem', borderRadius: '4px', backgroundColor: '#222', color: '#fff', border: '1px solid #444', textAlign: 'center' }} />
+            </label>
+            <div style={{ fontSize: '0.9rem', color: 'var(--primary-color)', marginTop: '0.5rem', fontWeight: 'bold' }}>
+              Total Accredited Individuals: {totals.totalAcc}
+            </div>
+          </div>
+        </div>
+
+        {/* Certifications Tracker */}
+        <div style={{ backgroundColor: 'var(--card-bg)', padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+          <h3 style={{ color: '#fff', marginBottom: '1rem', fontSize: '1.1rem' }}>AWS Certifications</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-muted)' }}>
+              <span>Foundational (Cloud Practitioner)</span>
+              <input type="number" min="0" value={partnerTier.certs.cloudPractitioner} onChange={(e) => handleCertChange('cloudPractitioner', e.target.value)} style={{ width: '60px', padding: '0.4rem', borderRadius: '4px', backgroundColor: '#222', color: '#fff', border: '1px solid #444', textAlign: 'center' }} />
             </label>
             <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-muted)' }}>
-              <span>AWS Solutions Architect (Professional)</span>
-              <select value={partnerTier.certs.solutionsArchitectPro} onChange={(e) => handleCertChange('solutionsArchitectPro', e.target.value)} style={{ padding: '0.25rem 0.5rem', borderRadius: '4px', backgroundColor: '#222', color: '#fff', border: '1px solid #444' }}>
-                {[0,1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}{n === 10 ? '+' : ''}</option>)}
-              </select>
+              <span>Associate Level</span>
+              <input type="number" min="0" value={partnerTier.certs.associate} onChange={(e) => handleCertChange('associate', e.target.value)} style={{ width: '60px', padding: '0.4rem', borderRadius: '4px', backgroundColor: '#222', color: '#fff', border: '1px solid #444', textAlign: 'center' }} />
             </label>
             <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-muted)' }}>
-              <span>AWS Security Specialty</span>
-              <select value={partnerTier.certs.securitySpec} onChange={(e) => handleCertChange('securitySpec', e.target.value)} style={{ padding: '0.25rem 0.5rem', borderRadius: '4px', backgroundColor: '#222', color: '#fff', border: '1px solid #444' }}>
-                {[0,1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}{n === 10 ? '+' : ''}</option>)}
-              </select>
+              <span>Professional Level</span>
+              <input type="number" min="0" value={partnerTier.certs.professional} onChange={(e) => handleCertChange('professional', e.target.value)} style={{ width: '60px', padding: '0.4rem', borderRadius: '4px', backgroundColor: '#222', color: '#fff', border: '1px solid #444', textAlign: 'center' }} />
             </label>
+            <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-muted)' }}>
+              <span>Specialty Level</span>
+              <input type="number" min="0" value={partnerTier.certs.specialty} onChange={(e) => handleCertChange('specialty', e.target.value)} style={{ width: '60px', padding: '0.4rem', borderRadius: '4px', backgroundColor: '#222', color: '#fff', border: '1px solid #444', textAlign: 'center' }} />
+            </label>
+            <div style={{ fontSize: '0.9rem', color: 'var(--primary-color)', marginTop: '0.5rem', fontWeight: 'bold' }}>
+              Total Certified Individuals: {totals.totalCerts}
+            </div>
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-        <div style={{ backgroundColor: 'var(--card-bg)', padding: '1.5rem', borderRadius: '8px' }}>
-          <h3 style={{ color: '#fff', marginBottom: '1rem', fontSize: '1.1rem' }}>Co-Sell Journey Progression</h3>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>Track your organization's alignment towards ISV Accelerate.</p>
-          <select 
-            value={partnerTier.coSellJourney} 
-            onChange={handleJourneyChange}
-            style={{ width: '100%', padding: '0.75rem', backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff', border: '1px solid var(--border-color)', borderRadius: '6px', fontSize: '1rem' }}
-          >
-            <option value="Good">Foundation</option>
-            <option value="Better">Validated Co-Sell</option>
-            <option value="Best">ISV Accelerate</option>
-          </select>
-        </div>
+      {/* Tier Readiness */}
+      <div style={{ marginBottom: '2rem' }}>
+        <h3 style={{ color: '#fff', marginBottom: '1rem' }}>Tier Readiness Checklist</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+          
+          <div style={{ padding: '1.5rem', backgroundColor: isEligible('ServicesSelect') ? 'rgba(16, 185, 129, 0.1)' : 'rgba(255,255,255,0.02)', borderRadius: '8px', border: `1px solid ${isEligible('ServicesSelect') ? '#10b981' : 'var(--border-color)'}` }}>
+            <h4 style={{ color: isEligible('ServicesSelect') ? '#10b981' : '#fff', marginTop: 0, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              {isEligible('ServicesSelect') ? '✅' : '⏳'} Select Tier
+            </h4>
+            <ul style={{ color: 'var(--text-muted)', fontSize: '0.9rem', paddingLeft: '1.2rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <li style={{ color: '#fff' }}>Total Req: 4 Accredited + 4 Certified</li>
+              <li style={{ color: totals.busAcc >= 2 && totals.techAcc >= 2 ? '#10b981' : '' }}>2 Business + 2 Technical Accreditations</li>
+              <li style={{ color: totals.cp >= 2 ? '#10b981' : '' }}>2 Foundational (Cloud Practitioner)</li>
+              <li style={{ color: totals.technicalCerts >= 2 ? '#10b981' : '' }}>2 Technical (Associate or higher)</li>
+            </ul>
+          </div>
 
-        <div style={{ backgroundColor: 'var(--card-bg)', padding: '1.5rem', borderRadius: '8px' }}>
-          <h3 style={{ color: '#fff', marginBottom: '1rem', fontSize: '1.1rem' }}>Sales Enablement Stage</h3>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>Reflects your GTM alignment and field readiness.</p>
-          <select 
-            value={partnerTier.enablementStage} 
-            onChange={handleEnablementChange}
-            style={{ width: '100%', padding: '0.75rem', backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff', border: '1px solid var(--border-color)', borderRadius: '6px', fontSize: '1rem' }}
-          >
-            <option value="Early">Early (Initial Training)</option>
-            <option value="Growth">Growth (Active Co-Selling)</option>
-            <option value="Mature">Mature (Strategic GTM Alignment)</option>
-          </select>
+          <div style={{ padding: '1.5rem', backgroundColor: isEligible('ServicesAdvanced') ? 'rgba(16, 185, 129, 0.1)' : 'rgba(255,255,255,0.02)', borderRadius: '8px', border: `1px solid ${isEligible('ServicesAdvanced') ? '#10b981' : 'var(--border-color)'}` }}>
+            <h4 style={{ color: isEligible('ServicesAdvanced') ? '#10b981' : '#fff', marginTop: 0, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              {isEligible('ServicesAdvanced') ? '✅' : '⏳'} Advanced Tier
+            </h4>
+            <ul style={{ color: 'var(--text-muted)', fontSize: '0.9rem', paddingLeft: '1.2rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <li style={{ color: '#fff' }}>Total Req: 8 Accredited + 10 Certified</li>
+              <li style={{ color: totals.busAcc >= 4 && totals.techAcc >= 4 ? '#10b981' : '' }}>4 Business + 4 Technical Accreditations</li>
+              <li style={{ color: totals.cp >= 4 ? '#10b981' : '' }}>4 Foundational (Cloud Practitioner)</li>
+              <li style={{ color: totals.technicalCerts >= 6 && totals.proSpec >= 3 ? '#10b981' : '' }}>6 Technical (min 3 Pro/Specialty)</li>
+            </ul>
+          </div>
+
+          <div style={{ padding: '1.5rem', backgroundColor: isEligible('ServicesPremier') ? 'rgba(16, 185, 129, 0.1)' : 'rgba(255,255,255,0.02)', borderRadius: '8px', border: `1px solid ${isEligible('ServicesPremier') ? '#10b981' : 'var(--border-color)'}` }}>
+            <h4 style={{ color: isEligible('ServicesPremier') ? '#10b981' : '#fff', marginTop: 0, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              {isEligible('ServicesPremier') ? '✅' : '⏳'} Premier Tier
+            </h4>
+            <ul style={{ color: 'var(--text-muted)', fontSize: '0.9rem', paddingLeft: '1.2rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <li style={{ color: '#fff' }}>Total Req: 20 Accredited + 35 Certified</li>
+              <li style={{ color: totals.busAcc >= 10 && totals.techAcc >= 10 ? '#10b981' : '' }}>10 Business + 10 Technical Accreditations</li>
+              <li style={{ color: totals.cp >= 10 ? '#10b981' : '' }}>10 Foundational (Cloud Practitioner)</li>
+              <li style={{ color: totals.technicalCerts >= 25 && totals.proSpec >= 10 ? '#10b981' : '' }}>25 Technical (min 10 Pro/Spec)</li>
+            </ul>
+          </div>
+          
         </div>
       </div>
 
-      <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-        <div style={{ padding: '1.5rem', backgroundColor: 'rgba(50, 78, 216, 0.1)', borderRadius: '8px', border: '1px solid var(--primary-color)' }}>
-          <h3 style={{ color: 'var(--primary-color)', marginBottom: '0.5rem', fontSize: '1.1rem' }}>Tier Check (Software Path)</h3>
-          <p style={{ color: '#fff', fontSize: '0.9rem' }}>
-            Validated: ✅ No certifications required. Relies on successful ACE Pipeline and FTR submission.
-          </p>
-          <p style={{ color: '#fff', fontSize: '0.9rem', marginTop: '0.5rem' }}>
-            Differentiated: {isEligible('SoftwareDifferentiated') ? '✅ Technical baseline met.' : '❌ Missing required advanced certifications for Differentiated.'}
-          </p>
-        </div>
-        <div style={{ padding: '1.5rem', backgroundColor: 'rgba(227, 179, 65, 0.1)', borderRadius: '8px', border: '1px solid #e3b341' }}>
-          <h3 style={{ color: '#e3b341', marginBottom: '0.5rem', fontSize: '1.1rem' }}>Tier Check (Services Path)</h3>
-          <p style={{ color: '#fff', fontSize: '0.9rem' }}>
-            Select: {isEligible('ServicesSelect') ? '✅ Tier readiness met.' : '❌ Missing certifications for Select.'}
-          </p>
-          <p style={{ color: '#fff', fontSize: '0.9rem', marginTop: '0.5rem' }}>
-            Advanced: {isEligible('ServicesAdvanced') ? '✅ Advanced Tier baseline met.' : '❌ Missing required advanced certifications for Advanced.'}
-          </p>
-          <p style={{ color: '#fff', fontSize: '0.9rem', marginTop: '0.5rem' }}>
-            Premier: {isEligible('ServicesPremier') ? '✅ Premier baseline met.' : '❌ Missing massive certification density for Premier.'}
-          </p>
+      {/* Quick Reference Guidance */}
+      <div style={{ backgroundColor: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+        <h3 style={{ color: '#fff', marginBottom: '1rem' }}>Certifications & Training Quick Reference</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
+          <div>
+            <h4 style={{ color: 'var(--primary-color)', marginBottom: '0.5rem' }}>Accreditations vs Certifications</h4>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.5 }}>
+              <strong>Accreditations</strong> focus on AWS partnership, sales, and core technical knowledge. They are completed through AWS Partner Central training modules and require periodic renewal.
+              <br/><br/>
+              <strong>Certifications</strong> represent validated technical/business expertise (Foundational, Associate, Professional, Specialty). They are obtained via AWS Training and Certification exams and are valid for 3 years.
+            </p>
+          </div>
+          <div>
+            <h4 style={{ color: 'var(--primary-color)', marginBottom: '0.5rem' }}>Scorecard Integration</h4>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.5 }}>
+              For certifications to appear on your Partner Scorecard, team members must use their Partner Central email for exams, or add their CertMetrics email to their Partner Central profile. Allow 5 business days for synchronization.
+            </p>
+          </div>
+          <div>
+            <h4 style={{ color: 'var(--primary-color)', marginBottom: '0.5rem' }}>Certification Benefits</h4>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.5 }}>
+              Partners receive AWS Promotional Credits for new certifications earned:
+              <br/>- <strong>$300</strong> per Associate cert (max 2/year)
+              <br/>- <strong>$500</strong> per Pro/Specialty cert (max 5/year)
+            </p>
+          </div>
         </div>
       </div>
     </div>
