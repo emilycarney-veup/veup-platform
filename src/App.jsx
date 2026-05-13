@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard';
 import ModuleView from './pages/ModuleView';
 import Resources from './pages/Resources';
 import Activities from './pages/Activities';
+import Workspace from './pages/Workspace';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/module/:moduleId" element={<ModuleView />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/activities" element={<Activities />} />
+          <Route path="/workspace" element={<Workspace />} />
         </Routes>
       </main>
     </div>

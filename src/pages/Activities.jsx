@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { 
   Users, Zap, FileCode2, ShieldCheck, Award, 
-  Target, FileText, BarChart3, Activity, Globe, ListOrdered, DollarSign, ArrowLeft
+  Target, FileText, BarChart3, Activity, Globe, ListOrdered, DollarSign, ArrowLeft, DownloadCloud
 } from 'lucide-react';
+import { useActivities } from '../context/ActivitiesContext';
 
 import StakeholderMapping from '../components/activities/StakeholderMapping';
 import BetterTogetherBuilder from '../components/activities/BetterTogetherBuilder';
@@ -35,17 +36,62 @@ export default function Activities() {
     { id: 'funding', name: 'Funding Eligibility', icon: <DollarSign size={24} />, color: '#dfff00', component: <FundingEligibilityChecker /> },
   ];
 
+  const { activitiesData } = useActivities();
+
+  const handleDownload = (activityId, activityName) => {
+    // Get the specific data for this activity
+    // Note: The context keys might not perfectly match the activity IDs, we map them here
+    let contextKey = activityId;
+    if (activityId === 'better-together') contextKey = 'betterTogether';
+    if (activityId === 'tier') contextKey = 'partnerTier';
+    if (activityId === 'opportunity') contextKey = 'opportunityHygiene';
+    if (activityId === 'sales') contextKey = 'salesPlays';
+
+    const dataToExport = {
+      veupActivityExport: true,
+      activityId: contextKey, // Use context key so restore works perfectly
+      activityName: activityName,
+      data: activitiesData[contextKey] || {}
+    };
+
+    const jsonString = JSON.stringify(dataToExport, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const href = URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = href;
+    link.download = `VeUP_${activityName.replace(/\s+/g, '_')}_Completed.json`;
+    document.body.appendChild(link);
+    link.click();
+    
+    document.body.removeChild(link);
+    URL.revokeObjectURL(href);
+  };
+
   if (activeActivity) {
     const activeData = activitiesList.find(a => a.id === activeActivity);
     return (
       <div className="dashboard">
-        <button 
-          onClick={() => setActiveActivity(null)}
-          className="nav-btn"
-          style={{ marginBottom: '2rem', width: 'fit-content' }}
-        >
-          <ArrowLeft size={16} /> Back to Hub
-        </button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+          <button 
+            onClick={() => setActiveActivity(null)}
+            className="nav-btn"
+          >
+            <ArrowLeft size={16} /> Back to Hub
+          </button>
+          
+          <button 
+            onClick={() => handleDownload(activeData.id, activeData.name)}
+            className="nav-btn"
+            style={{ 
+              backgroundColor: 'var(--primary-color)', 
+              color: '#000', 
+              borderColor: 'var(--primary-color)' 
+            }}
+          >
+            <DownloadCloud size={16} /> Download Hard Copy
+          </button>
+        </div>
         <div style={{ backgroundColor: 'var(--sidebar-bg)', padding: '2.5rem', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           {activeData.component}
         </div>

@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, BookOpen, FileText, Settings, HelpCircle, PenTool } from 'lucide-react';
+import { LayoutDashboard, BookOpen, FileText, Settings, HelpCircle, PenTool, FolderUp } from 'lucide-react';
 import { curriculum } from '../data/curriculum';
 
 export default function Sidebar() {
@@ -27,6 +27,10 @@ export default function Sidebar() {
       <Link to="/activities" className={`nav-link ${isActive('/activities') ? 'active' : ''}`}>
         <PenTool size={20} />
         Activities
+      </Link>
+      <Link to="/workspace" className={`nav-link ${isActive('/workspace') ? 'active' : ''}`}>
+        <FolderUp size={20} />
+        Workspace
       </Link>
       <Link to="/resources" className={`nav-link ${isActive('/resources') ? 'active' : ''}`}>
         <FileText size={20} />
