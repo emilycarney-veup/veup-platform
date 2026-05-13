@@ -34,6 +34,8 @@ export function ActivitiesProvider({ children }) {
         }
       },
       plgActionPlan: {
+        visionAndGoals: '',
+        priorityAreas: '',
         actions: [
           { id: 1, category: 'Marketplace', action: 'Complete AWS Marketplace listing submission', owner: '', targetDate: '', status: 'Not Started' },
           { id: 2, category: 'Product', action: 'Implement self-service onboarding flow', owner: '', targetDate: '', status: 'Not Started' },
@@ -47,7 +49,9 @@ export function ActivitiesProvider({ children }) {
     return { 
       ...defaultData, 
       ...parsed, 
-      expansion: { ...defaultData.expansion, ...(parsed.expansion || {}) } // deep merge expansion to fix crash
+      expansion: { ...defaultData.expansion, ...(parsed.expansion || {}) }, // deep merge expansion to fix crash
+      plgReadiness: { ...defaultData.plgReadiness, ...(parsed.plgReadiness || {}) },
+      plgActionPlan: { ...defaultData.plgActionPlan, ...(parsed.plgActionPlan || {}) }
     };
   });
 
