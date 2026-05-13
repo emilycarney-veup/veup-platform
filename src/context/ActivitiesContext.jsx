@@ -34,7 +34,11 @@ export function ActivitiesProvider({ children }) {
         }
       },
       plgActionPlan: {
-        visionAndGoals: '',
+        plgVision: '',
+        keyStakeholder: '',
+        subscriptionTarget: '',
+        conversionTarget: '',
+        ttvTarget: '',
         priorityAreas: '',
         actions: [
           { id: 1, category: 'Marketplace', action: 'Complete AWS Marketplace listing submission', owner: '', targetDate: '', status: 'Not Started' },

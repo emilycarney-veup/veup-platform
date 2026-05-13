@@ -38,41 +38,55 @@ export default function PLGReadinessAssessment() {
     marketplace: {
       title: "1. AWS Marketplace Readiness",
       questions: [
-        { id: 1, text: "Do you have an active AWS Marketplace listing (SaaS, AMI, or Container)?" },
-        { id: 2, text: "Is your Marketplace listing integrated with a self-service registration/onboarding flow?" },
-        { id: 3, text: "Are you utilizing the AWS Marketplace Entitlement and Metering APIs?" }
+        { id: 1, text: "Marketplace offer" },
+        { id: 2, text: "Free trial" },
+        { id: 3, text: "\"Try with AWS\" or \"Buy with AWS\" button" },
+        { id: 4, text: "AWS Marketplace offer discoverability" },
+        { id: 5, text: "Subscription or Consumption based pricing model" },
+        { id: 6, text: "ISV website product discovery" }
       ]
     },
     product: {
       title: "2. Product Experience & Value Delivery",
       questions: [
-        { id: 1, text: "Can users reach an 'Aha!' moment within 5 minutes of self-onboarding?" },
-        { id: 2, text: "Is there an embedded AI Onboarding Agent or guided walkthrough that operates without human intervention?" },
-        { id: 3, text: "Do you have in-app telemetry tracking user intent, drop-offs, and feature adoption?" }
+        { id: 1, text: "Defined ICP for PLG offer" },
+        { id: 2, text: "Automated onboarding" },
+        { id: 3, text: "Quick value realization" },
+        { id: 4, text: "Free trial pain point alignment" },
+        { id: 5, text: "Proactive and reactive guidance for user success" },
+        { id: 6, text: "Monetization trigger" }
       ]
     },
     pricing: {
       title: "3. Pricing & Business Model",
       questions: [
-        { id: 1, text: "Do you offer a frictionless Free Trial or Freemium tier directly on the Marketplace?" },
-        { id: 2, text: "Do you offer pure usage-based (Pay-As-You-Go) pricing that aligns with customer value?" },
-        { id: 3, text: "Is your pricing transparent, allowing customers to easily forecast their monthly AWS spend?" }
+        { id: 1, text: "Unit economics validation" },
+        { id: 2, text: "Self-service pricing clarity" },
+        { id: 3, text: "Value-based pricing" },
+        { id: 4, text: "Enterprise opportunity identification" }
       ]
     },
     technical: {
       title: "4. Technical Architecture & Implementation",
       questions: [
-        { id: 1, text: "Is your architecture built using a SaaS Control Plane (like SBT) to isolate billing, auth, and tenant routing?" },
-        { id: 2, text: "Do you separate resources effectively (e.g., shared infra for free tier, dedicated for standard)?" },
-        { id: 3, text: "Are billing events captured and sent to AWS automatically without manual reconciliation?" }
+        { id: 1, text: "Free trial technical readiness" },
+        { id: 2, text: "Integration monitoring" },
+        { id: 3, text: "Usage analytics" },
+        { id: 4, text: "Unit cost allocation" },
+        { id: 5, text: "AWS Marketplace Integration" },
+        { id: 6, text: "Control Plane" },
+        { id: 7, text: "Billing and metering flexibility" }
       ]
     },
     gtm: {
-      title: "5. Go-to-Market Strategy & COSS Alignment",
+      title: "5. Go-to-Market Strategy & Characteristics of Successful Seller Alignment",
       questions: [
-        { id: 1, text: "Are you leveraging AWS SEO and 'Buy with AWS' buttons on your own website?" },
-        { id: 2, text: "Do you qualify for the AWS List & Sell Program (PLG Ready tier)?" },
-        { id: 3, text: "Have you transitioned your sales motion to focus on product telemetry rather than cold outreach?" }
+        { id: 1, text: "AWS Marketplace channel strategy" },
+        { id: 2, text: "PLG Success Metrics" },
+        { id: 3, text: "PLG Organizational Ownership" },
+        { id: 4, text: "Cross-functional Collaboration" },
+        { id: 5, text: "COSS Framework Alignment" },
+        { id: 6, text: "PLG-aligned incentives" }
       ]
     }
   };

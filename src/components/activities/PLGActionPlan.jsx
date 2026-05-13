@@ -10,7 +10,11 @@ export default function PLGActionPlan() {
       return activitiesData.plgActionPlan;
     }
     return {
-      visionAndGoals: '',
+      plgVision: '',
+      keyStakeholder: '',
+      subscriptionTarget: '',
+      conversionTarget: '',
+      ttvTarget: '',
       priorityAreas: '',
       actions: [
         { id: 1, category: 'Marketplace', action: 'Complete AWS Marketplace listing submission', owner: '', targetDate: '', status: 'Not Started' },
@@ -79,22 +83,65 @@ export default function PLGActionPlan() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '2rem' }}>
         <div style={{ backgroundColor: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1.5rem' }}>
           <h3 style={{ margin: '0 0 1rem 0' }}>PLG Vision and Goals</h3>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1rem' }}>Define what success looks like for your PLG motion (e.g. increase free trial conversion by 20%, automate onboarding).</p>
-          <textarea 
-            value={data.visionAndGoals || ''} 
-            onChange={(e) => updateField('visionAndGoals', e.target.value)}
-            placeholder="Enter your strategic vision..."
-            style={{ width: '100%', minHeight: '100px', padding: '12px', backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', borderRadius: '8px', color: '#fff', fontFamily: 'inherit', resize: 'vertical' }}
-          />
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1rem' }}>
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>PLG Vision:</label>
+              <input 
+                type="text"
+                value={data.plgVision || ''} 
+                onChange={(e) => updateField('plgVision', e.target.value)}
+                style={{ width: '100%', padding: '8px', backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#fff' }}
+              />
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>ISV Key Stakeholder:</label>
+                <input 
+                  type="text"
+                  value={data.keyStakeholder || ''} 
+                  onChange={(e) => updateField('keyStakeholder', e.target.value)}
+                  style={{ width: '100%', padding: '8px', backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#fff' }}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Self-service subscription target:</label>
+                <input 
+                  type="text"
+                  value={data.subscriptionTarget || ''} 
+                  onChange={(e) => updateField('subscriptionTarget', e.target.value)}
+                  style={{ width: '100%', padding: '8px', backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#fff' }}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Free-to-paid conversion rate target:</label>
+                <input 
+                  type="text"
+                  value={data.conversionTarget || ''} 
+                  onChange={(e) => updateField('conversionTarget', e.target.value)}
+                  style={{ width: '100%', padding: '8px', backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#fff' }}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Time-to-value target:</label>
+                <input 
+                  type="text"
+                  value={data.ttvTarget || ''} 
+                  onChange={(e) => updateField('ttvTarget', e.target.value)}
+                  style={{ width: '100%', padding: '8px', backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#fff' }}
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         <div style={{ backgroundColor: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1.5rem' }}>
-          <h3 style={{ margin: '0 0 1rem 0' }}>Priority Improvement Areas</h3>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1rem' }}>Based on your assessment, list the major functional areas that need immediate attention.</p>
+          <h3 style={{ margin: '0 0 1rem 0' }}>Priority Improvement Areas: Agreed upon next steps</h3>
           <textarea 
             value={data.priorityAreas || ''} 
             onChange={(e) => updateField('priorityAreas', e.target.value)}
-            placeholder="Enter your priority areas..."
+            placeholder="Enter priority areas and agreed next steps..."
             style={{ width: '100%', minHeight: '100px', padding: '12px', backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', borderRadius: '8px', color: '#fff', fontFamily: 'inherit', resize: 'vertical' }}
           />
         </div>
